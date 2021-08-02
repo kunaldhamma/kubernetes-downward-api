@@ -12,6 +12,8 @@
 1. Introduction
 
 - 1.1 Kubernetes Downward API
+- 1.2 Exposing metadata through environment variables
+- 1.3 Exposing metadata though volumes
 
 ## 1. Introduction
 
@@ -29,11 +31,15 @@
   - The pod’s labels
   - The pod’s annotations
 
+### 1.2 Exposing metadata through environment variables
+
+Sample YAML to showcase exposing pod metadata via env: downward-api-env.yaml
+
 ```
 apiVersion: v1
 kind: Pod
 metadata:
-  name: downward
+  name: downward-env
 spec:
   containers:
   - name: main
@@ -79,6 +85,8 @@ spec:
           divisor: 1Ki
 ```
 
+Sample output after running downward-api-env.yaml:
+
 `k exec -it pod/downward sh`
 
 ```
@@ -89,7 +97,7 @@ KUBERNETES_PORT=tcp://10.245.0.1:443
 HOSTNAME=downward
 SHLVL=1
 HOME=/root
-NODE_NAME=digital-ocean-pool-85nn8
+NODE_NAME=digital-ocean-pool-xxxx
 CONTAINER_MEMORY_LIMIT_KIBIBYTES=125000
 TERM=xterm
 POD_NAME=downward
@@ -105,4 +113,11 @@ POD_NAMESPACE=ckad
 KUBERNETES_SERVICE_HOST=10.245.0.1
 ```
 
+### 1.3 Exposing metadata through volumes
+
+Sample YAML to showcase exposing pod metadata via env: downward-api-vol.yaml
+
+```
+
 _End of Section_
+```
