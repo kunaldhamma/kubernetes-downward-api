@@ -45,9 +45,9 @@ spec:
         memory: 4Mi
     env:
     - name: POD_NAME
-      valueFrom:                                   ❶
-        fieldRef:                                  ❶
-          fieldPath: metadata.name                 ❶
+      valueFrom:                                   
+        fieldRef:                                  
+          fieldPath: metadata.name                 
     - name: POD_NAMESPACE
           valueFrom:
         fieldRef:
@@ -65,10 +65,10 @@ spec:
         fieldRef:
           fieldPath: spec.serviceAccountName
     - name: CONTAINER_CPU_REQUEST_MILLICORES
-      valueFrom:                                   ❷
-        resourceFieldRef:                          ❷
-          resource: requests.cpu                   ❷
-          divisor: 1m                              ❸
+      valueFrom:                                   
+        resourceFieldRef:                          
+          resource: requests.cpu                   
+          divisor: 1m                              
     - name: CONTAINER_MEMORY_LIMIT_KIBIBYTES
       valueFrom:
         resourceFieldRef:
