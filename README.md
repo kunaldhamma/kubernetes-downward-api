@@ -26,7 +26,7 @@
   * The pod’s labels
   * The pod’s annotations
 
-'''
+```
 apiVersion: v1
 kind: Pod
 metadata:
@@ -74,7 +74,7 @@ spec:
         resourceFieldRef:
           resource: limits.memory
           divisor: 1Ki
-'''
+```
 
 
 
