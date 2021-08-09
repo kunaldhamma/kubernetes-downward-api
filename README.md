@@ -35,6 +35,8 @@
 
 Sample YAML to showcase exposing pod metadata via env: downward-api-env.yaml
 
+To test this grab the file here: wget https://raw.githubusercontent.com/jamesbuckett/kubernetes-downward-api/master/downward-api-env.yaml
+
 ```
 apiVersion: v1
 kind: Pod
@@ -48,17 +50,17 @@ spec:
     resources:
       requests:
         cpu: 15m
-        memory: 16M
+        memory: 128M
       limits:
         cpu: 100m
-        memory: 128M
+        memory: 256M
     env:
     - name: POD_NAME
       valueFrom:
         fieldRef:
           fieldPath: metadata.name
     - name: POD_NAMESPACE
-          valueFrom:
+      valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
     - name: POD_IP
@@ -87,30 +89,30 @@ spec:
 
 Sample output after running downward-api-env.yaml:
 
-`k exec -it pod/downward sh`
+`kubectl exec -it pod/downward-env env`
 
 ```
-/ # env
-POD_IP=10.244.0.39
-KUBERNETES_SERVICE_PORT=443
-KUBERNETES_PORT=tcp://10.245.0.1:443
-HOSTNAME=downward
-SHLVL=1
-HOME=/root
-NODE_NAME=digital-ocean-pool-xxxx
-CONTAINER_MEMORY_LIMIT_KIBIBYTES=125000
-TERM=xterm
-POD_NAME=downward
-KUBERNETES_PORT_443_TCP_ADDR=10.245.0.1
-SERVICE_ACCOUNT=default
+root@digital-ocean-droplet:~# kubectl exec -it pod/downward-env env
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-KUBERNETES_PORT_443_TCP_PORT=443
-CONTAINER_CPU_REQUEST_MILLICORES=15
+HOSTNAME=downward-env
+NODE_NAME=digital-ocean-pool-xxxxx                                               ## - The name of the node the pod is running on
+SERVICE_ACCOUNT=default                                                                     ## - The name of the service account
+CONTAINER_CPU_REQUEST_MILLICORES=15                                    ## - The CPU and memory requests for each container
+CONTAINER_MEMORY_LIMIT_KIBIBYTES=250000                            ## - The CPU and memory limits for each container
+POD_NAME=downward-env                                                                       ## - The pod’s name
+POD_NAMESPACE=ckad                                                                              ## - The namespace the pod belongs to
+POD_IP=10.244.0.1                                                                                        ## - The pod’s IP address
 KUBERNETES_PORT_443_TCP_PROTO=tcp
-KUBERNETES_SERVICE_PORT_HTTPS=443
-KUBERNETES_PORT_443_TCP=tcp://10.245.0.1:443
-POD_NAMESPACE=ckad
+KUBERNETES_PORT_443_TCP_PORT=443
+KUBERNETES_PORT_443_TCP_ADDR=10.245.0.1
 KUBERNETES_SERVICE_HOST=10.245.0.1
+KUBERNETES_SERVICE_PORT=443
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_PORT=tcp://10.245.0.1:443
+KUBERNETES_PORT_443_TCP=tcp://10.245.0.1:443
+TERM=xterm
+HOME=/root
 ```
 
 ### 1.3 Exposing metadata through volumes
