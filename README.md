@@ -35,7 +35,7 @@
 
 Sample YAML to showcase exposing pod metadata via env: downward-api-env.yaml
 
-To test this grab the file here: wget https://raw.githubusercontent.com/jamesbuckett/kubernetes-downward-api/master/downward-api-env.yaml
+To test this grab the file here: `wget https://raw.githubusercontent.com/jamesbuckett/kubernetes-downward-api/master/downward-api-env.yaml`
 
 ```
 apiVersion: v1
@@ -96,13 +96,13 @@ root@digital-ocean-droplet:~# kubectl exec -it pod/downward-env env
 kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 HOSTNAME=downward-env
-NODE_NAME=digital-ocean-pool-xxxxx                       ## - The name of the node the pod is running on
-SERVICE_ACCOUNT=default                                             ## - The name of the service account
-CONTAINER_CPU_REQUEST_MILLICORES=15            ## - The CPU and memory requests for each container
-CONTAINER_MEMORY_LIMIT_KIBIBYTES=250000   ## - The CPU and memory limits for each container
-POD_NAME=downward-env                                             ## - The pod’s name
-POD_NAMESPACE=ckad                                                    ## - The namespace the pod belongs to
-POD_IP=10.244.0.1                                                              ## - The pod’s IP address
+NODE_NAME=digital-ocean-pool-xxxxx - The name of the node the pod is running on
+SERVICE_ACCOUNT=default - The name of the service account
+CONTAINER_CPU_REQUEST_MILLICORES=15 - The CPU and memory requests for each container
+CONTAINER_MEMORY_LIMIT_KIBIBYTES=250000 - The CPU and memory limits for each container
+POD_NAME=downward-env - The pod’s name
+POD_NAMESPACE=ckad - The namespace the pod belongs to
+POD_IP=10.244.0.1 - The pod’s IP address
 KUBERNETES_PORT_443_TCP_PROTO=tcp
 KUBERNETES_PORT_443_TCP_PORT=443
 KUBERNETES_PORT_443_TCP_ADDR=10.245.0.1
@@ -120,6 +120,101 @@ HOME=/root
 Sample YAML to showcase exposing pod metadata via env: downward-api-vol.yaml
 
 ```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: downward-vol
+  labels:
+    foo: bar
+  annotations:
+    key1: value1
+    key2: |
+      multi
+      line
+      value
+spec:
+  containers:
+    - name: main
+      image: busybox
+      command: ["sleep", "9999999"]
+      resources:
+        requests:
+          cpu: 15m
+          memory: 16M
+        limits:
+          cpu: 100m
+          memory: 128M
+      volumeMounts:
+        - name: downward
+          mountPath: /etc/downward
+  volumes:
+    - name: downward
+      downwardAPI:
+        items:
+          - path: "podName"
+            fieldRef:
+              fieldPath: metadata.name
+          - path: "podNamespace"
+            fieldRef:
+              fieldPath: metadata.namespace
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
+          - path: "containerCpuRequestMilliCores"
+            resourceFieldRef:
+              containerName: main
+              resource: requests.cpu
+              divisor: 1m
+          - path: "containerMemoryLimitBytes"
+            resourceFieldRef:
+              containerName: main
+              resource: limits.memory
+              divisor: 1
+```
+
+To test this grab the file here: `wget https://raw.githubusercontent.com/jamesbuckett/kubernetes-downward-api/master/downward-api-env.yaml`
+
+`kubectl exec -it pod/downward-vol sh`
+
+```
+root@digital-ocean-droplet:~# k exec -it pod/downward-vol sh
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+
+/ # ls -la
+total 44
+drwxr-xr-x    1 root     root          4096 Aug  9 11:51 .
+drwxr-xr-x    1 root     root          4096 Aug  9 11:51 ..
+drwxr-xr-x    2 root     root         12288 Jun  7 17:34 bin
+drwxr-xr-x    5 root     root           360 Aug  9 11:51 dev
+drwxr-xr-x    1 root     root          4096 Aug  9 11:51 etc
+drwxr-xr-x    2 nobody   nobody        4096 Jun  7 17:34 home
+dr-xr-xr-x  194 root     root             0 Aug  9 11:51 proc
+drwx------    1 root     root          4096 Aug  9 11:53 root
+dr-xr-xr-x   13 root     root             0 Aug  9 11:51 sys
+drwxrwxrwt    2 root     root          4096 Jun  7 17:34 tmp
+drwxr-xr-x    3 root     root          4096 Jun  7 17:34 usr
+drwxr-xr-x    1 root     root          4096 Aug  9 11:51 var
+
+/ # cd etc/downward/
+
+/etc/downward # ls -la
+total 4
+drwxrwxrwt    3 root     root           200 Aug  9 11:51 .
+drwxr-xr-x    1 root     root          4096 Aug  9 11:51 ..
+drwxr-xr-x    2 root     root           160 Aug  9 11:51 ..2021_08_09_11_51_16.095792186
+lrwxrwxrwx    1 root     root            31 Aug  9 11:51 ..data -> ..2021_08_09_11_51_16.095792186
+lrwxrwxrwx    1 root     root            18 Aug  9 11:51 annotations -> ..data/annotations
+lrwxrwxrwx    1 root     root            36 Aug  9 11:51 containerCpuRequestMilliCores -> ..data/containerCpuRequestMilliCores
+lrwxrwxrwx    1 root     root            32 Aug  9 11:51 containerMemoryLimitBytes -> ..data/containerMemoryLimitBytes
+lrwxrwxrwx    1 root     root            13 Aug  9 11:51 labels -> ..data/labels
+lrwxrwxrwx    1 root     root            14 Aug  9 11:51 podName -> ..data/podName
+lrwxrwxrwx    1 root     root            19 Aug  9 11:51 podNamespace -> ..data/podNamespace
+
+/etc/downward # cat podName
+downward-vol - The pod’s name
+```
 
 _End of Section_
-```
