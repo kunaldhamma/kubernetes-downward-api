@@ -10,10 +10,10 @@ spec:
       resources:
         requests:
           cpu: 15m
-          memory: 100Ki
+          memory: 128M
         limits:
           cpu: 100m
-          memory: 4Mi
+          memory: 256M
       env:
         - name: POD_NAME
           valueFrom:
