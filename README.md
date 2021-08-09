@@ -96,13 +96,13 @@ root@digital-ocean-droplet:~# kubectl exec -it pod/downward-env env
 kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 HOSTNAME=downward-env
-NODE_NAME=digital-ocean-pool-xxxxx                                               ## - The name of the node the pod is running on
-SERVICE_ACCOUNT=default                                                                     ## - The name of the service account
-CONTAINER_CPU_REQUEST_MILLICORES=15                                    ## - The CPU and memory requests for each container
-CONTAINER_MEMORY_LIMIT_KIBIBYTES=250000                            ## - The CPU and memory limits for each container
-POD_NAME=downward-env                                                                       ## - The pod’s name
-POD_NAMESPACE=ckad                                                                              ## - The namespace the pod belongs to
-POD_IP=10.244.0.1                                                                                        ## - The pod’s IP address
+NODE_NAME=digital-ocean-pool-xxxxx                       ## - The name of the node the pod is running on
+SERVICE_ACCOUNT=default                                             ## - The name of the service account
+CONTAINER_CPU_REQUEST_MILLICORES=15            ## - The CPU and memory requests for each container
+CONTAINER_MEMORY_LIMIT_KIBIBYTES=250000   ## - The CPU and memory limits for each container
+POD_NAME=downward-env                                             ## - The pod’s name
+POD_NAMESPACE=ckad                                                    ## - The namespace the pod belongs to
+POD_IP=10.244.0.1                                                              ## - The pod’s IP address
 KUBERNETES_PORT_443_TCP_PROTO=tcp
 KUBERNETES_PORT_443_TCP_PORT=443
 KUBERNETES_PORT_443_TCP_ADDR=10.245.0.1
