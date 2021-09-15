@@ -37,7 +37,7 @@ Sample YAML to showcase exposing pod metadata via env: downward-api-env.yaml
 
 To test this grab the file here: `wget https://raw.githubusercontent.com/jamesbuckett/kubernetes-downward-api/master/downward-api-env.yaml`
 
-```
+```bash
 apiVersion: v1
 kind: Pod
 metadata:
@@ -89,9 +89,11 @@ spec:
 
 Sample output after running downward-api-env.yaml:
 
-`kubectl exec -it pod/downward-env env`
-
+```bash
+`kubectl exec pod/downward-env env`
 ```
+
+```bash
 root@digital-ocean-droplet:~# kubectl exec -it pod/downward-env env
 kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -119,7 +121,7 @@ HOME=/root
 
 Sample YAML to showcase exposing pod metadata via env: downward-api-vol.yaml
 
-```
+```bash
 apiVersion: v1
 kind: Pod
 metadata:
@@ -177,9 +179,11 @@ spec:
 
 To test this grab the file here: `wget https://raw.githubusercontent.com/jamesbuckett/kubernetes-downward-api/master/downward-api-env.yaml`
 
-`kubectl exec -it pod/downward-vol sh`
-
+```bash
+kubectl exec -it pod/downward-vol sh
 ```
+
+```bash
 root@digital-ocean-droplet:~# k exec -it pod/downward-vol sh
 kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
 
